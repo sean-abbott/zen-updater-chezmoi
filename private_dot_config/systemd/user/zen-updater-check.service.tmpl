@@ -1,0 +1,6 @@
+[Unit]
+Description=Check for Zen Browser updates and install if newer
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/chezmoi apply --source {{ .chezmoi.sourceDir }} --persistent-state {{ .chezmoi.homeDir }}/.local/state/chezmoi-profiles/zen.boltdb

@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodic Zen Browser update check
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=1d
+Persistent=true
+
+[Install]
+WantedBy=timers.target

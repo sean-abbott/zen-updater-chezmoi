@@ -1,0 +1,14 @@
+#!/bin/sh
+# Re-runs only when a new Zen release is about to be applied -- this comment
+# embeds the target version so its hash changes exactly then:
+# target version: {{ (gitHubLatestRelease "zen-browser/desktop").TagName }}
+set -eu
+
+root="$HOME/.local/opt/zen-browser"
+current="$root/current"
+previous="$root/previous"
+
+mkdir -p "$root"
+if [ -d "$current" ]; then
+  rsync -a --delete "$current/" "$previous/"
+fi

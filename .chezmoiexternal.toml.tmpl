@@ -1,0 +1,14 @@
+# Keeps ~/.local/opt/zen-browser/current in sync with the latest Zen Browser
+# release tarball. `exact = true` makes chezmoi reconcile the directory's
+# *contents* the same way `rsync -a --delete` does -- it never removes or
+# recreates the directory itself. That matters because Zen derives its
+# default profile from a hash of the resolved install path: if this path
+# were ever swapped out from under a running Zen process, it would spin up
+# a fresh empty profile on next restart. stripComponents = 1 drops the
+# tarball's top-level `zen/` directory so files land directly in `current/`.
+[".local/opt/zen-browser/current"]
+    type = "archive"
+    url = {{ gitHubLatestReleaseAssetURL "zen-browser/desktop" "zen.linux-x86_64.tar.xz" | quote }}
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "24h"
