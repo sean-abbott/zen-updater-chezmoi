@@ -26,7 +26,7 @@ own external-resolution machinery.
 - **`dot_local/share/applications/zen.desktop.tmpl`** and
   **`dot_local/bin/symlink_zen.tmpl`** install the desktop entry and the
   `zen` binary symlink.
-- **`private_dot_config/systemd/user/zen-updater-check.{service,timer}`**
+- **`dot_config/systemd/user/zen-updater-check.{service,timer}`**
   install a `systemd --user` timer that runs `chezmoi apply` once a day
   (plus ~15 minutes after login if that day's run hasn't happened yet).
 
@@ -57,6 +57,15 @@ shared directory as "changed since chezmoi last wrote it" and refuses to
 touch it. Confirmed by hitting this for real and fixing it — the systemd
 timer's own `ExecStart` already includes it, but any manual invocation
 needs it added too.
+
+A second, nastier version of the same problem hit `~/.config` itself: this
+repo originally used `private_dot_config` (mode 0700), while the other two
+use plain `dot_config` for the same shared ancestor directory. Unlike
+`--persistent-state`, which only isolates each profile's own *memory*,
+this one had each profile's apply actually *changing* `.config`'s real
+permissions to a different value than the last one wrote — so they fought
+over it indefinitely, no flag fixes that. Renamed to plain `dot_config` to
+match the other two and stop asserting a conflicting opinion about it.
 
 **If you already have Zen installed another way**, check what chezmoi would
 change before applying anything:
